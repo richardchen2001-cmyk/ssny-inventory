@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smile Services of New York — Inventory</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pm: #3c3089; --pd: #2d2260; --pl: #7c6ec2;
+  --gold: #f4b942; --goldl: #ffd47a;
+  --bg: #f7f6fb; --card: #fff; --text: #1a1535;
+  --muted: #6b639a; --border: #e2dff4;
+  --low: #e87c3e; --out: #d93636; --ok: #3aaa6e;
+  --sh: 0 2px 12px rgba(44,34,96,.10);
+  --shl: 0 8px 32px rgba(44,34,96,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+header{background:linear-gradient(135deg,var(--pd),var(--pm) 60%,var(--pl));color:#fff;padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(44,34,96,.25)}
+.hi{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.logo{font-size:1.1rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.sub{font-size:.68rem;font-weight:600;opacity:.7;letter-spacing:1px;text-transform:uppercase}
+.hsearch{flex:1;max-width:210px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:24px;padding:7px 14px;color:#fff;font-family:'Nunito',sans-serif;font-size:.85rem;outline:none}
+.hsearch::placeholder{color:rgba(255,255,255,.6)}
+
+.sbar{background:#fff;border-bottom:1px solid var(--border);padding:10px 16px}
+.si{max-width:700px;margin:0 auto;display:flex;gap:10px}
+.chip{display:flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:20px;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.chip.all{background:var(--pm);color:#fff}
+.chip.low{background:#fff4ee;color:var(--low);border-color:#ffd5ba}
+.chip.out{background:#fff0f0;color:var(--out);border-color:#ffc0c0}
+.chip.active{border-color:var(--gold)!important;box-shadow:0 0 0 2px rgba(244,185,66,.2)}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.low{background:var(--low)}
+.dot.out{background:var(--out)}
+
+.tw{padding:12px 16px 0;overflow-x:auto;scrollbar-width:none}
+.tw::-webkit-scrollbar{display:none}
+.tabs{max-width:700px;margin:0 auto;display:flex;gap:8px}
+.tab{white-space:nowrap;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;border:2px solid var(--border);background:#fff;color:var(--muted);transition:all .15s}
+.tab.active{background:var(--pm);color:#fff;border-color:var(--pm)}
+
+main{max-width:700px;margin:0 auto;padding:14px 16px 100px}
+
+.card{background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:12px 14px;margin-bottom:9px;box-shadow:var(--sh);transition:box-shadow .15s;animation:fi .2s ease}
+.card:hover{box-shadow:var(--shl)}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card.low{border-left:4px solid var(--low)}
+.card.out{border-left:4px solid var(--out)}
+.card.ok{border-left:4px solid var(--ok)}
+
+.ir{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.iname{font-weight:800;font-size:.9rem;line-height:1.3}
+.imeta{font-size:.7rem;font-weight:600;color:var(--muted);margin-top:2px}
+.iright{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.qc{display:flex;align-items:center;gap:5px}
+.qb{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:#fff;color:var(--pm);font-size:1rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;padding:0}
+.qb:active{background:var(--pm);color:#fff;border-color:var(--pm)}
+.qn{font-size:1rem;font-weight:900;min-width:26px;text-align:center}
+.badge{font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.bok{background:#e8f8f0;color:var(--ok)}
+.blow{background:#fff4ee;color:var(--low)}
+.bout{background:#fff0f0;color:var(--out)}
+
+.ia{display:flex;gap:6px;margin-top:9px}
+.bs{font-family:'Nunito',sans-serif;font-size:.73rem;font-weight:700;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all .12s}
+.bs:hover{border-color:var(--pl);color:var(--pm)}
+.bs.danger:hover{border-color:var(--out);color:var(--out)}
+.brest{background:var(--pm);color:#fff;border-color:var(--pm)}
+.brest:hover{background:var(--pd);border-color:var(--pd);color:#fff}
+.ela{font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;padding:0;text-decoration:underline dotted}
+.ela:hover{color:var(--pm)}
+
+.sh{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.sh::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.ei{font-size:2.5rem;margin-bottom:8px}
+
+.fab{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,var(--gold),var(--goldl));color:var(--pd);width:58px;height:58px;border-radius:50%;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 20px rgba(244,185,66,.45);display:flex;align-items:center;justify-content:center;transition:transform .15s;z-index:200}
+.fab:active{transform:scale(.93)}
+
+.mo{position:fixed;inset:0;background:rgba(44,34,96,.45);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.open{opacity:1;pointer-events:all}
+.modal{background:#fff;width:100%;max-width:700px;border-radius:24px 24px 0 0;padding:24px 20px 36px;transform:translateY(100%);transition:transform .25s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto}
+.mo.open .modal{transform:translateY(0)}
+.mh{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px}
+.mt{font-size:1.2rem;font-weight:900;color:var(--pd);margin-bottom:18px}
+.fg{margin-bottom:14px}
+label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px}
+input[type=text],input[type=number],select{width:100%;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;padding:10px 14px;border:2px solid var(--border);border-radius:10px;color:var(--text);background:var(--bg);outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--pl)}
+.fr{display:flex;gap:10px}
+.fr .fg{flex:1}
+.fn{font-size:.74rem;color:var(--muted);margin-top:4px}
+.bp{width:100%;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;cursor:pointer;margin-top:8px;box-shadow:0 4px 14px rgba(60,48,137,.3);transition:opacity .15s}
+.bp:active{opacity:.85}
+.bc{width:100%;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;padding:11px;border-radius:12px;border:2px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;margin-top:8px}
+.rn{font-weight:900;font-size:1.05rem;color:var(--pd);margin-bottom:4px}
+.rc{font-size:.85rem;color:var(--muted);margin-bottom:16px}
+
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--pd);color:#fff;font-size:.85rem;font-weight:700;padding:10px 20px;border-radius:24px;opacity:0;pointer-events:none;transition:all .25s;z-index:400;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="hi">
+    <div>
+      <div class="logo">🦷 Smile Services of New York</div>
+      <div class="sub">Inventory Manager</div>
+    </div>
+    <input class="hsearch" type="text" id="searchInput" placeholder="Search items…">
+  </div>
+</header>
+
+<div class="sbar">
+  <div class="si">
+    <div class="chip all active" id="fAll" onclick="setFilter('all')">All <span id="cAll">0</span></div>
+    <div class="chip low" id="fLow" onclick="setFilter('low')"><span class="dot low"></span> Low <span id="cLow">0</span></div>
+    <div class="chip out" id="fOut" onclick="setFilter('out')"><span class="dot out"></span> Out <span id="cOut">0</span></div>
+  </div>
+</div>
+
+<div class="tw"><div class="tabs" id="catTabs"></div></div>
+<main id="list"></main>
+<button class="fab" onclick="openAdd()">+</button>
+
+<div class="mo" id="mAdd">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mt">Add New Item</div>
+    <div class="fg"><label>Item Name</label><input type="text" id="nName" placeholder="e.g. Nitrile Gloves (M)"></div>
+    <div class="fr">
+      <div class="fg"><label>Category</label>
+        <select id="nCat">
+          <option>Surgical &amp; Sutures</option>
+          <option>Sterilization</option>
+          <option>Gauze &amp; Wound Care</option>
+          <option>Impression Materials</option>
+          <option>Restorative &amp; Cements</option>
+          <option>Burs &amp; Instruments</option>
+          <option>Suction &amp; Evacuation</option>
+          <option>PPE &amp; Barriers</option>
+          <option>Misc &amp; Office</option>
+        </select>
+      </div>
+      <div class="fg"><label>Unit</label><input type="text" id="nUnit" placeholder="boxes, pcs…"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Qty in Stock</label><input type="number" id="nQty" min="0" placeholder="0"></div>
+      <div class="fg"><label>Low Alert ≤</label><input type="number" id="nLow" min="0" placeholder="5"></div>
+    </div>
+    <div class="fn">⚠ Items at or below Low Alert will be flagged automatically.</div>
+    <button class="bp" onclick="saveItem()">Add Item</button>
+    <button class="bc" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="mo" id="mRestock">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mt">📦 Restock</div>
+    <div class="rn" id="rName"></div>
+    <div class="rc" id="rCur"></div>
+    <div class="fg"><label>Quantity to Add</label><input type="number" id="rQty" min="1" placeholder="Enter amount received"></div>
+    <button class="bp" onclick="confirmRestock()">✓ Confirm Restock</button>
+    <button class="bc" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="mo" id="mLow">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mt">Edit Low Alert</div>
+    <div class="rn" id="lName"></div>
+    <div class="rc" id="lCur"></div>
+    <div class="fg"><label>Flag as Low when stock ≤</label><input type="number" id="lVal" min="0"></div>
+    <button class="bp" onclick="confirmLow()">Save</button>
+    <button class="bc" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+var STORAGE_KEY = 'smileservices_v4';
+
+var CATS = [
+  'All',
+  'Surgical & Sutures',
+  'Sterilization',
+  'Gauze & Wound Care',
+  'Impression Materials',
+  'Restorative & Cements',
+  'Burs & Instruments',
+  'Suction & Evacuation',
+  'PPE & Barriers',
+  'Misc & Office'
+];
+
+var RAW = [
+  ['12 Surgical Blades','Surgical & Sutures','boxes',3],
+  ['15 Surgical Blades','Surgical & Sutures','boxes',3],
+  ['3.0 Chromic Sutures','Surgical & Sutures','packs',5],
+  ['Vicryl Sutures','Surgical & Sutures','packs',5],
+  ['Dry Socket Surgical Dressing','Surgical & Sutures','packs',3],
+  ['Mayo-Hegar Needle Holder TC 7in','Surgical & Sutures','pcs',1],
+  ['Minnesota Cheek Retractor','Surgical & Sutures','pcs',2],
+  ['Tongue Depressor','Surgical & Sutures','bags',2],
+  ['2.25 x 4 Sterilization Pouch','Sterilization','boxes',10],
+  ['2.25 x 5 Sterilization Pouch','Sterilization','boxes',10],
+  ['2.75 x 9 Sterilization Pouch','Sterilization','boxes',10],
+  ['3.5 x 5.25 Sterilization Pouch','Sterilization','boxes',10],
+  ['3.5 x 6.5 Sterilization Pouch','Sterilization','boxes',10],
+  ['5.25 x 10 Sterilization Pouch','Sterilization','boxes',10],
+  ['2x2 Gauze','Gauze & Wound Care','packs',8],
+  ['4x4 Gauze','Gauze & Wound Care','packs',8],
+  ['Cotton Rolls','Gauze & Wound Care','bags',5],
+  ['Cotton Tip Applicator','Gauze & Wound Care','boxes',3],
+  ['Alginate Powder','Impression Materials','bags',3],
+  ['Bite Registration','Impression Materials','pks',3],
+  ['Heavy Body','Impression Materials','kits',3],
+  ['Light Body','Impression Materials','kits',3],
+  ['Super Light Body','Impression Materials','kits',3],
+  ['Putty Set','Impression Materials','kits',2],
+  ['Temp Impression','Impression Materials','kits',3],
+  ['Purple Impression Mixing Tips','Impression Materials','bags',5],
+  ['Yellow Impression Mixing Tips','Impression Materials','bags',5],
+  ['Temp Impression Tips (light blue)','Impression Materials','bags',5],
+  ['Impression Guns','Impression Materials','pcs',2],
+  ['Impression Trays #1 Large Upper','Impression Materials','pcs',5],
+  ['Impression Trays #2 Large Lower','Impression Materials','pcs',5],
+  ['Impression Trays #3 Medium Upper','Impression Materials','pcs',5],
+  ['Impression Trays #4 Medium Lower','Impression Materials','pcs',5],
+  ['Impression Trays #5 Small Upper','Impression Materials','pcs',5],
+  ['Impression Trays #6 Small Lower','Impression Materials','pcs',5],
+  ['Trays (General)','Impression Materials','pcs',5],
+  ['Acrylic Resin','Restorative & Cements','kits',2],
+  ['Core Build Up','Restorative & Cements','syringes',3],
+  ['Desensitizer','Restorative & Cements','bottles',2],
+  ['Fiber Post','Restorative & Cements','pcs',5],
+  ['Hand Reline','Restorative & Cements','kits',2],
+  ['Hemodent','Restorative & Cements','bottles',2],
+  ['Implant Cement','Restorative & Cements','pcs',3],
+  ['RelyX Cement','Restorative & Cements','kits',3],
+  ['Resilient Acrylic Denture Tissue Treatment','Restorative & Cements','kits',2],
+  ['Resilient Reline Liner','Restorative & Cements','kits',2],
+  ['Soft Reline Impression','Restorative & Cements','kits',2],
+  ['Soft Reline Tissue Conditioner','Restorative & Cements','kits',2],
+  ['SureFil','Restorative & Cements','syringes',3],
+  ['Telio','Restorative & Cements','kits',2],
+  ['Temporary Bond Cement','Restorative & Cements','pcs',3],
+  ['Articulating Paper','Restorative & Cements','books',5],
+  ['Matrix Strips','Restorative & Cements','packs',3],
+  ['Mixing Pad','Restorative & Cements','pads',5],
+  ['Wedges','Restorative & Cements','bags',5],
+  ['Dapping Dish','Restorative & Cements','pcs',2],
+  ['Polishing & Finishing Strips','Restorative & Cements','packs',3],
+  ['Stripping System','Restorative & Cements','kits',2],
+  ['Carbide Burs FG/4SL Round','Burs & Instruments','pcs',5],
+  ['Carbide Burs FG/6SL Round','Burs & Instruments','pcs',5],
+  ['Carbide Burs FGSC8 Round','Burs & Instruments','pcs',5],
+  ['Flame Burs','Burs & Instruments','pcs',5],
+  ['SS White Surgical Carbide Burs 701','Burs & Instruments','pcs',5],
+  ['Surgical Carbide Burs FG557','Burs & Instruments','pcs',5],
+  ['Surgical Carbide Burs FG558','Burs & Instruments','pcs',5],
+  ['Surgical High Speeds','Burs & Instruments','pcs',3],
+  ['Air/Water Syringe','Burs & Instruments','pcs',2],
+  ['Suctions (High Volume)','Suction & Evacuation','bags',5],
+  ['Suctions (Saliva Ejector)','Suction & Evacuation','bags',5],
+  ['Suctions (Surgical)','Suction & Evacuation','bags',5],
+  ['Suctions (Endo)','Suction & Evacuation','bags',5],
+  ['Face Mask Level 3','PPE & Barriers','boxes',5],
+  ['Gloves S','PPE & Barriers','boxes',5],
+  ['Gloves M','PPE & Barriers','boxes',5],
+  ['Gowns S','PPE & Barriers','pcs',5],
+  ['Gowns M','PPE & Barriers','pcs',5],
+  ['Gowns L','PPE & Barriers','pcs',5],
+  ['Air/Water Syringe Sleeve','PPE & Barriers','bags',5],
+  ['Barrier Tape','PPE & Barriers','rolls',3],
+  ['Bib Chain','PPE & Barriers','pcs',2],
+  ['Bibs','PPE & Barriers','bags',5],
+  ['Curing Light Sleeve','PPE & Barriers','bags',5],
+  ['Full Chair Cover Sleeves','PPE & Barriers','bags',5],
+  ['Keyboard Cover','PPE & Barriers','pcs',2],
+  ['Pano Bite Block Sleeve','PPE & Barriers','bags',5],
+  ['Patient Goggles','PPE & Barriers','pcs',3],
+  ['Tray Cover Paper','PPE & Barriers','rolls',3],
+  ['Tray Cover Sleeves','PPE & Barriers','bags',5],
+  ['X-ray Sleeves','PPE & Barriers','bags',5],
+  ['Black Tips','Misc & Office','bags',5],
+  ['Blue Tips (for etch)','Misc & Office','bags',5],
+  ['Intraoral Yellow Tip','Misc & Office','bags',5],
+  ['Micro Brush','Misc & Office','bags',5],
+  ['Cavi Wipes','Misc & Office','canisters',5],
+  ['C-Folds','Misc & Office','bags',3],
+  ['Cups','Misc & Office','bags',5],
+  ['Dry Angle','Misc & Office','bags',5],
+  ['Floss','Misc & Office','spools',3]
+];
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function makeDefaults() {
+  return RAW.map(function(r) {
+    return { id: uid(), name: r[0], cat: r[1], unit: r[2], lowAt: r[3], qty: 0 };
+  });
+}
+
+var items = [];
+var activeFilter = 'all';
+var activeCat = 'All';
+var restockId = null;
+var lowId = null;
+
+function load() {
+  try {
+    var s = localStorage.getItem(STORAGE_KEY);
+    items = s ? JSON.parse(s) : makeDefaults();
+  } catch(e) {
+    items = makeDefaults();
+  }
+}
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch(e) {}
+}
+
+function status(item) {
+  if (item.qty === 0) return 'out';
+  if (item.qty <= item.lowAt) return 'low';
+  return 'ok';
+}
+
+function buildTabs() {
+  var html = '';
+  for (var i = 0; i < CATS.length; i++) {
+    var c = CATS[i];
+    var active = c === activeCat ? ' active' : '';
+    html += '<div class="tab' + active + '" data-cat="' + i + '">' + c + '</div>';
+  }
+  document.getElementById('catTabs').innerHTML = html;
+  var tabs = document.getElementById('catTabs').querySelectorAll('.tab');
+  for (var j = 0; j < tabs.length; j++) {
+    tabs[j].addEventListener('click', function() {
+      setCat(CATS[parseInt(this.getAttribute('data-cat'))]);
+    });
+  }
+}
+
+function setCat(c) { activeCat = c; buildTabs(); render(); }
+
+function setFilter(f) {
+  activeFilter = f;
+  ['all','low','out'].forEach(function(x) {
+    var el = document.getElementById('f' + x.charAt(0).toUpperCase() + x.slice(1));
+    if (el) el.classList.toggle('active', x === f);
+  });
+  render();
+}
+
+function updateStats() {
+  var low = 0, out = 0;
+  for (var i = 0; i < items.length; i++) {
+    var s = status(items[i]);
+    if (s === 'low') low++;
+    if (s === 'out') out++;
+  }
+  document.getElementById('cAll').textContent = items.length;
+  document.getElementById('cLow').textContent = low;
+  document.getElementById('cOut').textContent = out;
+}
+
+function cardHTML(item) {
+  var s = status(item);
+  var bc = s === 'ok' ? 'bok' : s === 'low' ? 'blow' : 'bout';
+  var bt = s === 'ok' ? '&#10003; OK' : s === 'low' ? '&#9888; Low' : '&#10005; Out';
+  return '<div class="card ' + s + '">' +
+    '<div class="ir">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="iname">' + item.name + '</div>' +
+        '<div class="imeta">' + item.unit + ' &middot; alert &le;' + item.lowAt +
+          ' &middot; <button class="ela" onclick="openLow(\'' + item.id + '\')">edit alert</button></div>' +
+      '</div>' +
+      '<div class="iright">' +
+        '<div class="qc">' +
+          '<button class="qb" onclick="chQty(\'' + item.id + '\',-1)">&#8722;</button>' +
+          '<span class="qn">' + item.qty + '</span>' +
+          '<button class="qb" onclick="chQty(\'' + item.id + '\',1)">+</button>' +
+        '</div>' +
+        '<span class="badge ' + bc + '">' + bt + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="ia">' +
+      '<button class="bs brest" onclick="openRestock(\'' + item.id + '\')">&#128230; Restock</button>' +
+      '<button class="bs" onclick="markOut(\'' + item.id + '\')">Mark Out</button>' +
+      '<button class="bs danger" onclick="del(\'' + item.id + '\')">Delete</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function render() {
+  updateStats();
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  var filtered = items.filter(function(item) {
+    var matchCat = activeCat === 'All' || item.cat === activeCat;
+    var matchQ = item.name.toLowerCase().indexOf(q) !== -1 || item.cat.toLowerCase().indexOf(q) !== -1;
+    var matchF = activeFilter === 'all' || status(item) === activeFilter;
+    return matchCat && matchQ && matchF;
+  });
+
+  var list = document.getElementById('list');
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty"><div class="ei">&#128230;</div><div>No items found</div></div>';
+    return;
+  }
+
+  if (activeCat === 'All' && !q) {
+    var grouped = {};
+    var order = CATS.slice(1);
+    for (var i = 0; i < order.length; i++) grouped[order[i]] = [];
+    for (var j = 0; j < filtered.length; j++) {
+      var item = filtered[j];
+      if (grouped[item.cat]) grouped[item.cat].push(item);
+    }
+    var html = '';
+    for (var k = 0; k < order.length; k++) {
+      var cat = order[k];
+      var its = grouped[cat];
+      if (!its.length) continue;
+      html += '<div class="sh">' + cat + '</div>';
+      for (var m = 0; m < its.length; m++) html += cardHTML(its[m]);
+    }
+    list.innerHTML = html;
+  } else {
+    var html2 = '';
+    for (var n = 0; n < filtered.length; n++) html2 += cardHTML(filtered[n]);
+    list.innerHTML = html2;
+  }
+}
+
+function chQty(id, d) {
+  var item = find(id); if (!item) return;
+  item.qty = Math.max(0, item.qty + d);
+  save(); render();
+}
+
+function markOut(id) {
+  var item = find(id); if (!item) return;
+  item.qty = 0; save(); render();
+  toast(item.name + ' marked out of stock');
+}
+
+function del(id) {
+  var item = find(id);
+  if (!confirm('Remove "' + (item ? item.name : '') + '" from inventory?')) return;
+  items = items.filter(function(x) { return x.id !== id; });
+  save(); render();
+}
+
+function openAdd() {
+  ['nName','nQty','nLow','nUnit'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  open('mAdd');
+}
+
+function openRestock(id) {
+  restockId = id;
+  var item = find(id); if (!item) return;
+  document.getElementById('rName').textContent = item.name;
+  document.getElementById('rCur').textContent = 'Current: ' + item.qty + ' ' + item.unit;
+  document.getElementById('rQty').value = '';
+  open('mRestock');
+}
+
+function openLow(id) {
+  lowId = id;
+  var item = find(id); if (!item) return;
+  document.getElementById('lName').textContent = item.name;
+  document.getElementById('lCur').textContent = 'Current threshold: \u2264' + item.lowAt + ' ' + item.unit;
+  document.getElementById('lVal').value = item.lowAt;
+  open('mLow');
+}
+
+function closeModal() {
+  var ms = document.querySelectorAll('.mo');
+  for (var i = 0; i < ms.length; i++) ms[i].classList.remove('open');
+  restockId = null; lowId = null;
+}
+
+function open(id) { document.getElementById(id).classList.add('open'); }
+
+function saveItem() {
+  var name = document.getElementById('nName').value.trim();
+  if (!name) { alert('Enter an item name.'); return; }
+  var cat = document.getElementById('nCat').value;
+  var unit = document.getElementById('nUnit').value.trim() || 'units';
+  var qty = parseInt(document.getElementById('nQty').value) || 0;
+  var lowAt = parseInt(document.getElementById('nLow').value) || 5;
+  items.push({ id: uid(), name: name, cat: cat, unit: unit, qty: qty, lowAt: lowAt });
+  save(); closeModal(); render();
+  toast(name + ' added!');
+}
+
+function confirmRestock() {
+  var add = parseInt(document.getElementById('rQty').value);
+  if (!add || add < 1) { alert('Enter a valid quantity.'); return; }
+  var item = find(restockId); if (!item) return;
+  item.qty += add; save(); closeModal(); render();
+  toast('Restocked ' + item.name + ' (+' + add + ')');
+}
+
+function confirmLow() {
+  var val = parseInt(document.getElementById('lVal').value);
+  if (isNaN(val) || val < 0) { alert('Enter a valid number.'); return; }
+  var item = find(lowId); if (!item) return;
+  item.lowAt = val; save(); closeModal(); render();
+  toast('Alert updated for ' + item.name);
+}
+
+function find(id) {
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].id === id) return items[i];
+  }
+  return null;
+}
+
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+var overlays = document.querySelectorAll('.mo');
+for (var oi = 0; oi < overlays.length; oi++) {
+  overlays[oi].addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+load();
+buildTabs();
+render();
+
+</script>
+</body>
+</html>
